@@ -7,12 +7,12 @@ function DOMController(){
 	this.components = {};
 
 	this.init = function(){
-		_this.login = new Login(_this);
-		_this.monitor = new Monitor(_this);
-		_this.settings = new Settings(_this);
+		_this.login         = new Login(_this);
+		_this.monitor       = new Monitor(_this);
+		_this.settings      = new Settings(_this);
 		_this.notifications = new Notifications(_this);
-		_this.wifiSelector = new WifiSelector(_this);
-		_this.account = new Account(_this);
+		_this.wifiSelector  = new WifiSelector(_this);
+		_this.account       = new Account(_this);
 		_this.navWidgets.click(_this.navigate);
 	}
 
@@ -24,8 +24,9 @@ function DOMController(){
 	}
 
 	this.onLogin = function(){
-		this.show("monitor");
-		this.logedOptions.css("display", "block")
+		this.show("wifiSelector");
+		this.logedOptions.css("display", "block");
+		this.wifiSelector.getNetworks();
 	}
 
 	this.navigate = function(evnt){
@@ -35,7 +36,6 @@ function DOMController(){
 	}
 
 	this.document.ready(this.init);
-
 	return this;
 }
 

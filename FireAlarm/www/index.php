@@ -1,3 +1,7 @@
+<?php
+	$access = "PUBLIC";
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -41,7 +45,7 @@
 				</li>
 				<li><a href="#">About</a></li>
 				<li><a href="#">Contact</a></li>
-					-->
+				-->
 				<li><a class="navigation onceLoged" href="#" style="display: none;" name="account">Cuenta</a></li>
 				<li><a class="navigation onceLoged" href="#" style="display: none;" name="monitor">Monitoreo</a></li>
 				<li><a class="navigation onceLoged" href="#" style="display: none;" name="notifications">Notificaciones</a></li>
@@ -68,14 +72,15 @@
 	</div>
 
 	<div class="container b-color-3 color-0 fillHeight" id="wifiCont" style="display: none;">
-		<div class="list-group">
-			<button type="button" class="list-group-item">These Boots Are Made For Walking</button>
+		<div class="list-group" id="wifiList">
+			<h1>Redes disponibles</h1>
 		</div>
 		<form class="form" id="wifiForm" style="display: none;">
+			<h3 id="selectedNet"></h3>
 			<input type="hidden" name="type" value="wifiSelection">
 			<div class="form-group">
-				<label for="wifiPasswd">Email:</label>
-				<input type="text" name="wifiPasswd" class="form-control" id="wifiPasswd" required="required">
+				<label for="wifiPasswd">Password</label>
+				<input type="password" name="wifiPasswd" class="form-control" id="wifiPasswd" required="required">
 				<button type="submit" class="btn btn-default">Connect</button>
 			</div>
 		</form>
