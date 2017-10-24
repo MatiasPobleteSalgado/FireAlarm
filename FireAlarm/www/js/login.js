@@ -36,5 +36,13 @@ function Login(controller) {
 	this.form.on("submit", this.send);
 	this.controller.components["login"] = this.container;
 
+	this.show = function(){
+		this.container.css("display", "block");
+	}
+
+	this.hide = function(){
+		this.container.css("display", "none");
+	}
+
 	return this;
 }

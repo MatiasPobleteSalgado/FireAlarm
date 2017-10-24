@@ -5,5 +5,13 @@ function Account(controller) {
 	
 	this.controller.components["account"] = this.container;
 
+	this.show = function(){
+		this.container.css("display", "block");
+	}
+
+	this.hide = function(){
+		this.container.css("display", "none");
+	}
+
 	return this;
 }

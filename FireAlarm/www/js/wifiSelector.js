@@ -47,5 +47,14 @@ function WifiSelector(controller) {
 
 	this.wifiForm.on("submit", this.sendNetworkData);
 	this.controller.components["wifiSelector"] = this.container;
+
+	this.show = function(){
+		this.container.css("display", "block");
+	}
+
+	this.hide = function(){
+		this.container.css("display", "none");
+	}
+	
 	return this;
 }

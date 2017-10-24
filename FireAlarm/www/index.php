@@ -91,11 +91,15 @@
 	</div>
 
 	<div class="container b-color-3 color-0 fillHeight" id="monitorCont" style="display: none;">
-		<h1>Monitor</h1>
+		<h1>Monitor de sensores</h1>
+		<ul class="list-group" id="sensorList">
+			
+		</ul>
 	</div>
 
 	<div class="container b-color-3 color-0 fillHeight" id="accountCont" style="display: none;">
-		<h1>Accout</h1>
+		<h1>Cuenta</h1>
+
 	</div>
 
 	<div class="container b-color-3 color-0 fillHeight" id="notificationCont" style="display: none;">

@@ -18,15 +18,15 @@ function DOMController(){
 
 	this.show = function(comp){
 		for(var c in this.components){
-			this.components[c].css("display", "none");
+			this.components[c].hide();
 		}
-		this.components[comp].css("display", "block");
+		this.components[comp].show();
 	}
 
 	this.onLogin = function(){
 		this.show("wifiSelector");
 		this.logedOptions.css("display", "block");
-		this.wifiSelector.getNetworks();
+		//this.wifiSelector.getNetworks();
 	}
 
 	this.navigate = function(evnt){
