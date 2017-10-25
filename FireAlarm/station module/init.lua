@@ -37,41 +37,34 @@ end
 srv=net.createServer(net.TCP)
 srv:listen(80,function(conn)
     conn:on("receive",function(client,request)
-
+        client:send_header('Access-Control-Allow-Origin','*')
         ---------- get post args ----------
         local args = string.match(request,"\r\n\r\n(.*)")
-        if args == "" then args="{}" end
+        if args == "" or args == nil then args="{}" end
         print(args)
         args = cjson.decode(args)
         -----------------------------------
 
-        ---------- mcu_action receive ----------
-        if args.mcu_action ~= nil then
-            if args.mcu_action == "set_credential" then
+        ---------- action receive ----------
+        if args.type ~= nil then
+            if args.type == "set_credential" then
                 mcu_action.set_credential(client,args)
-            elseif args.mcu_action == "get_adc" then
+            elseif args.type == "get_adc" then
                 mcu_action.get_adc(client)
-            elseif args.mcu_action == "get_ip" then
+            elseif args.type == "get_ip" then
                 mcu_action.get_ip(client)
-            elseif args.mcu_action == "get_networks" then
+            elseif args.type == "get_networks" then
                 mcu_action.get_networks(client)
+            elseif args.type == "set_user" then
+                if wifi.sta.getip() ~= nil then
+                    client:send(srv_action.set_user(args))
+                else
+                    client:send('{"ERROR":"NilReturn","Message":"NodeMCU is not Connected"}')
+                end
             else
                 client:send('{"ERROR":"NilReturn","Message":"The action is not recognized"}')
             end
-        ----------------------------------------
-
-        ---------- srv_action receive ----------
-        elseif args.srv_action ~= nil then
-            if wifi.sta.getip() ~= nil then
-                if args.srv_action == "set_user" then
-                    client:send(srv_action.set_user(args))
-                else
-                    client:send('{"ERROR":"NilReturn","Message":"The action is not recognized"}')
-                end
-            else
-                client:send('{"ERROR":"NilReturn","Message":"NodeMCU is not Connected"}')
-            end
-        ----------------------------------------
+        --------------------------------------
 
         ---------- on invalid post ----------
         else
