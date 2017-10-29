@@ -136,7 +136,7 @@
         var times = 2;
         navigator.notification.beep(times);
     };
-})();*/
+})();
 
 
 document.addEventListener("deviceready", onDeviceReady, false);
@@ -178,7 +178,7 @@ function myStopFunction() {
 
 /////////////////////////////////////////////////////////
 // 2DO PLANO
-/*
+
 document.addEventListener('deviceready', function () {
     // cordova.plugins.backgroundMode is now available
 }, false);
@@ -188,4 +188,35 @@ cordova.plugins.backgroundMode.enable();
 
 cordova.plugins.backgroundMode.isActive();
 cordova.plugins.backgroundMode.on('EVENT', function);
+*/
+document.addEventListener('deviceready', function () {
+    // cordova.plugins.notification.local is now available
+}, false);
+
+var date = new Date();
+
+cordova.plugins.notification.local.schedule({
+    id: 1,
+    title: "Message Title",
+    message: "Message Text",
+    firstAt: date, // firstAt and at properties must be an IETF-compliant RFC 2822 timestamp
+    every: "week", // this also could be minutes i.e. 25 (int)
+    sound: "file://sounds/reminder.mp3",
+    icon: "http://icons.com/?cal_id=1",
+    data: { meetingId: "123#fg8" }
+});
+
+cordova.plugins.notification.local.on("click", function (notification) {
+    joinMeeting(notification.data.meetingId);
+});
+
+/*
+document.addEventListener('deviceready', function () {
+    // Schedule notification for tomorrow to remember about the meeting
+    cordova.plugins.notificación.local.horario({
+        texto: "¡ Despierta! ",
+        sonido: " file: //sounds/alert.caf ",
+        cada: 30  // cada 30 minutos 
+    });
+}, false);
 */
