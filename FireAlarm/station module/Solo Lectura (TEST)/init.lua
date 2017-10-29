@@ -3,8 +3,8 @@ net.dns.setdnsserver("8.8.8.8", 0)
 net.dns.setdnsserver("8.8.4.4", 1)
 wifi.setmode(wifi.STATION)
 station_cfg={}
-station_cfg.ssid="Kanela2"
-station_cfg.pwd="23407D733F"
+station_cfg.ssid="NombreRed"
+station_cfg.pwd="PasswordRed"
 
 if wifi.sta.getip() ~= nil then
         tmr.alarm(0, 1500, 1, function ()
@@ -16,7 +16,7 @@ if wifi.sta.getip() ~= nil then
                 table["type"] = "Alert"
                 table["value"] = val
                 httpModule.httpPost('http://pillan.inf.uct.cl/~itopp/test.php', 
-                                    cjson.encode(table),
+                                    table,
                                     function(data)
                                         if data == '' or data == nil then
                                             print('{"ERROR" : "Empty Value"}')

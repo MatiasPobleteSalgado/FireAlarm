@@ -1,23 +1,15 @@
-<?php
-	if($_POST){
-		try {
-			$data = json_encode($_POST);//var_dump($_POST);
-		} catch (Exception $e) {
-			$a = 0;
-		}
+﻿<?php
+	if(isset($_POST)){
 		$aJson = array(
-						    'type' => 'success', //código fijo
-						    'Message' => 'hello from server'
-						);
-		if(isset($data)){
-			$res = stripslashes($data);
-			$res = stripslashes($res);
-			$res = stripslashes($res);
-			$res = str_replace('\"', '', $res);
+				'type' => 'success', //código fijo
+				'Message' => 'hello from server'
+			);
+		$data = json_decode(file_get_contents('php://input'), true);
+		if(isset($data['value'])){
 			$aJson = array(
-						    'type' => 'success', //código fijo
-						    'Message' => $res
-						);
+					'type' => 'success', //código fijo
+					'Message' => $data['value']
+					);
 		}
 		header('Content-type: application/json; charset=utf-8');
 		echo json_encode($aJson);
