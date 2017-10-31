@@ -1,3 +1,5 @@
+-- horas perdidas en este codigo: 3
+
 ---------- imports ----------
 local mcu_action = require('mcu_action')
 local srv_action = require('srv_action')
@@ -44,6 +46,7 @@ srv:listen(80,function(conn)
         print(request)
         local args = string.match(request,"{.-$")
         if args == "" or args == nil then args="{}" end
+        print("<"..args..">")
         args = cjson.decode(args)
         --print(args.type)
         -----------------------------------
@@ -61,25 +64,23 @@ srv:listen(80,function(conn)
             elseif args.type == "set_user" then
                 if wifi.sta.getip() ~= nil then
                     client:send(srv_action.set_user(args))
+                    client:close()
                 else
                     client:send('{"type":"Error","Message":"NodeMCU is not Connected"}')
+                    client:close()
                 end
             else
                 client:send('{"type":"Error","Message":"The action is not recognized"}')
+                client:close()
             end
         --------------------------------------
 
         ---------- on invalid post ----------
-        -- Aqui el bug
         --else
-          --  print("NAAANDATOOO")
-            --client:send('{"ERROR":"NilReturn","Message":"None is returned"}')
+        --    client:send('{"ERROR":"NilReturn","Message":"None is returned"}')
+        --    client:close()
         end
         -------------------------------------
-    end)
-    conn:on("sent",function(client)
-        print("Closing")
-        client:close() 
     end)
 end)
 -------------------------------------

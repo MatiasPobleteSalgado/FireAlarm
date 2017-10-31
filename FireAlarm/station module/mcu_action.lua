@@ -3,9 +3,8 @@ httpHeader = 'HTTP/1.1 200 OK\r\nAccess-Control-Allow-Origin:*\r\nAccess-Control
 
 local function get_networks(client)
     if wifi.getmode() == wifi.STATIONAP then
-        local list = '{}'
         wifi.sta.getap(function(T)
-            list = '{'
+            local list = '{'
             local i = 0
             for k,v in pairs(T) do
                 list = list..'"'..i..'"'..':'..'"'..k..'",'
@@ -15,12 +14,15 @@ local function get_networks(client)
             if list ~= nil then
                 print(httpHeader .. list)
                 client:send(httpHeader .. list)
+                client:close()
             else
                 client:send('{"ERROR":"NilReturn", "Message":"None is return"}')
+                client:close()
             end
         end)
     else
         client:send('{"ERROR":"NilReturn","Message":"WifiStationAP not established"}')
+        client:close()
     end
 end
 
@@ -35,6 +37,8 @@ local function set_credential(client,dict)
         file.writeline(str)
         file.close()
         client:send(httpHeader .. '{"Message":"success"}')
+        client:close()
+
         local mytimer = tmr.create()
 
         -- oo calling
@@ -49,18 +53,22 @@ local function set_credential(client,dict)
         mytimer = nil
     else
         client:send(httpHeader .. '{"ERROR":"nilFile","Message":"Error has occurred while trying to manipulate the file"}')
+        client:close()
     end
 end
 
 local function get_adc(client)
     client:send(httpHeader .. '{"Value":'..adc.read(0)..',"Message":"Success"}')
+    client:close()
 end
 
 local function get_ip(client)
     if wifi.sta.getip() ~= nil then
         client:send(httpHeader .. '{"Value":"'..wifi.sta.getip()..'","Message":"Success"}')
+        client:close()
     else
         client:send(httpHeader .. '{"ERROR":"NilReturn","Message":"NodeMCU is not Connected"}')
+        client:close()
     end
 end
 
