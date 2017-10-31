@@ -17,7 +17,7 @@ end
 ---------- wifi and net init config ----------
 wifi.setmode(wifi.STATIONAP)
 math.randomseed(tmr.time())
-wifi.ap.config({ssid = "MCU_"..math.random(0,9)..math.random(0,9)..math.random(0,9)..""})
+wifi.ap.config({ssid = "MCU"})--)..math.random(0,9)..math.random(0,9)..math.random(0,9)..""})
 wifi.ap.setip({ip = "192.168.1.1", netmask = "255.255.255.0", gateway = "192.168.1.1"})
 wifi.ap.dhcp.config({start = "192.168.1.100"})
 net.dns.setdnsserver("8.8.8.8", 0)
@@ -37,12 +37,15 @@ end
 srv=net.createServer(net.TCP)
 srv:listen(80,function(conn)
     conn:on("receive",function(client,request)
-        client:send_header('Access-Control-Allow-Origin','*')
+        --client:send("HTTP/1.1 200 OK\r\n")
+        --client:send('Access-Control-Allow-Origin:*\r\nAccess-Control-Allow- Methods", "POST, GET\r\nAccess-Control-Allow-Headers *AUTHORISED*\r\n')
+        --client:send("Content-Type: application/json\r\n\r\n")
         ---------- get post args ----------
-        local args = string.match(request,"\r\n\r\n(.*)")
+        print(request)
+        local args = string.match(request,"{.-$")
         if args == "" or args == nil then args="{}" end
-        print(args)
         args = cjson.decode(args)
+        --print(args.type)
         -----------------------------------
 
         ---------- action receive ----------
@@ -59,20 +62,23 @@ srv:listen(80,function(conn)
                 if wifi.sta.getip() ~= nil then
                     client:send(srv_action.set_user(args))
                 else
-                    client:send('{"ERROR":"NilReturn","Message":"NodeMCU is not Connected"}')
+                    client:send('{"type":"Error","Message":"NodeMCU is not Connected"}')
                 end
             else
-                client:send('{"ERROR":"NilReturn","Message":"The action is not recognized"}')
+                client:send('{"type":"Error","Message":"The action is not recognized"}')
             end
         --------------------------------------
 
         ---------- on invalid post ----------
-        else
-            client:send('{"ERROR":"NilReturn","Message":"None is returned"}')
+        -- Aqui el bug
+        --else
+          --  print("NAAANDATOOO")
+            --client:send('{"ERROR":"NilReturn","Message":"None is returned"}')
         end
         -------------------------------------
     end)
     conn:on("sent",function(client)
+        print("Closing")
         client:close() 
     end)
 end)

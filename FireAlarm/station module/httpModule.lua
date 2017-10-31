@@ -1,8 +1,8 @@
 local httpModule = {}
 
-local function httpPost(url,dict, callback)
+local function httpPost(url, dict, callback)
     http.post(url,
-        "Content-Type: application/json\r\nAccept: application/json\r\n",
+        'Content-Type: application/json\r\n',
         cjson.encode(dict),
         function (code,data)
             if (code < 0) then

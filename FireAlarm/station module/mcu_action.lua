@@ -1,4 +1,5 @@
 local mcu_action = {}
+httpHeader = 'HTTP/1.1 200 OK\r\nAccess-Control-Allow-Origin:*\r\nAccess-Control-Allow-Headers *AUTHORISED*\r\nContent-Type: application/json\r\n\r\n\r\n'
 
 local function get_networks(client)
     if wifi.getmode() == wifi.STATIONAP then
@@ -12,7 +13,8 @@ local function get_networks(client)
             end
             list = string.sub(list,1,-2)..'}'
             if list ~= nil then
-                client:send(list)
+                print(httpHeader .. list)
+                client:send(httpHeader .. list)
             else
                 client:send('{"ERROR":"NilReturn", "Message":"None is return"}')
             end
@@ -32,24 +34,33 @@ local function set_credential(client,dict)
         str = str..'}'
         file.writeline(str)
         file.close()
-        wifi.sta.disconnect()
-        wifi.sta.config(cjson.decode(str))
-        wifi.sta.connect()
-        client:send('{"Message":"success"}')
+        client:send(httpHeader .. '{"Message":"success"}')
+        local mytimer = tmr.create()
+
+        -- oo calling
+        mytimer:register(5000, tmr.ALARM_SINGLE, function (t)
+            print("changing mode")
+            wifi.sta.disconnect()
+            wifi.setmode(wifi.STATION)
+            wifi.sta.config(cjson.decode(str))
+            wifi.sta.connect()
+        end)
+        mytimer:start()
+        mytimer = nil
     else
-        client:send('{"ERROR":"nilFile","Message":"Error has occurred while trying to manipulate the file"}')
+        client:send(httpHeader .. '{"ERROR":"nilFile","Message":"Error has occurred while trying to manipulate the file"}')
     end
 end
 
 local function get_adc(client)
-    client:send('{"Value":'..adc.read(0)..',"Message":"Success"}')
+    client:send(httpHeader .. '{"Value":'..adc.read(0)..',"Message":"Success"}')
 end
 
 local function get_ip(client)
     if wifi.sta.getip() ~= nil then
-        client:send('{"Value":"'..wifi.sta.getip()..'","Message":"Success"}')
+        client:send(httpHeader .. '{"Value":"'..wifi.sta.getip()..'","Message":"Success"}')
     else
-        client:send('{"ERROR":"NilReturn","Message":"NodeMCU is not Connected"}')
+        client:send(httpHeader .. '{"ERROR":"NilReturn","Message":"NodeMCU is not Connected"}')
     end
 end
 

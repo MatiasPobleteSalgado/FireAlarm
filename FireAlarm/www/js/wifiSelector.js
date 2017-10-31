@@ -6,14 +6,29 @@ function WifiSelector(controller) {
 	this.wifiForm   = $("#wifiForm");
 	this.selectedNet = $("#selectedNet");
 	this.selectedNetID = null;
+	this.nodeIP = null;
 
 	this.getNetworks = function(){
-		for(indx in post){
-			this.wifiList.append(
-				'<button type="button" class="list-group-item wifiNetBtn" id="net-' + indx +'">' + post[indx] + '</button>'
-			)
-		}
-		$(".wifiNetBtn").click(this.selectNetwork);
+		console.log("Sending request");
+		/*
+		$.ajax({
+			url: "http://192.168.1.1",
+			data: {"type": "get_networks"},
+			type: 'POST',
+			crossDomain: true,
+			dataType: 'json',
+			success: this.nodeWifiNetResponse,
+			error: function() { alert('Failed!'); }
+		});
+		*/
+		
+		$.post(
+			"http://localhost/nodeSim",
+			{"type": "get_networks"},
+			_this.nodeWifiNetResponse,
+			"json"
+		);
+
 	}
 
 	this.selectNetwork = function(evnt){
@@ -41,11 +56,31 @@ function WifiSelector(controller) {
 		);
 	}
 
-	this.nodeResponse = function(data, status){
-		console.log(data);
+	this.nodeIPResponse = function(data, status){
+		var ipData = JSON.parse(data);
+		_this.nodeIP = ipData.ip;
+	}
+
+	this.nodeWifiNetResponse = function(data, status){
+		var nets = JSON.parse(data);
+		for(indx in nets){
+			this.wifiList.append(
+				'<button type="button" class="list-group-item wifiNetBtn" id="net-' + indx +'">' + post[indx] + '</button>'
+			)
+		}
+		$(".wifiNetBtn").click(this.selectNetwork);
 	}
 
 	this.wifiForm.on("submit", this.sendNetworkData);
-	this.controller.components["wifiSelector"] = this.container;
+	this.controller.components["wifiSelector"] = this;
+
+	this.show = function(){
+		this.container.css("display", "block");
+	}
+
+	this.hide = function(){
+		this.container.css("display", "none");
+	}
+
 	return this;
 }
