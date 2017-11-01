@@ -164,15 +164,27 @@ function myFunction() {
 }
 
 function showAlert() {
-    navigator.notification.alert(
-        'Sr(a) ' + myObj.name +' su casa se esta quemando',           // message
-        alertDismissed,                                               // callback
+    navigator.notification.confirm(
+        'Sr(a) ' + myObj.name + ' su casa se esta quemando',           // message
+        OK(1),                                            // callback
         'Notificacion',                                               // title
-        'OK'//myStopFunction()                                              // buttonName
+        ['OK','NO']                       // buttonName
     );
 }
 function myStopFunction() {
     clearInterval(myVar);
+}
+
+function OK(buttonIndex) {
+    console.log(buttonIndex == '1')
+    if ('1' == buttonIndex) {
+        navigator.notification.alert(
+            'MENSAJE',
+            alertDismissed,  //callback
+            'TITULO',
+            'BOTON'
+        );
+    }; 
 }
 
 
@@ -189,6 +201,8 @@ cordova.plugins.backgroundMode.enable();
 cordova.plugins.backgroundMode.isActive();
 cordova.plugins.backgroundMode.on('EVENT', function);
 */
+
+/*
 document.addEventListener('deviceready', function () {
     // cordova.plugins.notification.local is now available
 }, false);
@@ -210,7 +224,7 @@ cordova.plugins.notification.local.on("click", function (notification) {
     joinMeeting(notification.data.meetingId);
 });
 
-/*
+
 document.addEventListener('deviceready', function () {
     // Schedule notification for tomorrow to remember about the meeting
     cordova.plugins.notificación.local.horario({
@@ -219,4 +233,75 @@ document.addEventListener('deviceready', function () {
         cada: 30  // cada 30 minutos 
     });
 }, false);
+
+
+document.addEventListener("deviceready", onDeviceReady, false);
+function onDeviceReady() {
+    console.log(navigator.notification);
+}
+
+function onConfirm(buttonIndex) {
+    alert('You selected button ' + buttonIndex);
+}
+
+navigator.notification.confirm(
+    'You are the winner!', // message
+    onConfirm,            // callback to invoke with index of button pressed
+    'Game Over',           // title
+    ['Restart', 'Exit']     // buttonLabels
+);
+
 */
+
+document.addEventListener("deviceready", onDeviceReady, false);
+
+// Cordova is ready
+//
+function onDeviceReady() {
+    // Empty
+}
+
+// process the confirmation dialog result
+function onConfirm(buttonIndex) {
+    //console.log('se selecciono el boton ' + buttonIndex);
+    if (1 == buttonIndex) {
+        //alert('funciona pls ' + buttonIndex);
+        myStopFunction();
+        callNumber(103);
+    }
+    else {
+        //alert('no funciono ' + buttonIndex);
+        myStopFunction();
+    }
+}
+
+// Show a custom confirmation dialog
+//
+function showConfirm() {
+    navigator.notification.confirm(
+        'Desea llamar a emergencias',  // message
+        onConfirm,              // callback to invoke with index of button pressed
+        'CASA EN PELIGRO',            // title
+        'EMERGENCIAS, NO'          // buttonLabels
+    );
+}
+function myFunction() {
+    myVar = setInterval(showConfirm, 3000);
+}
+
+//CALNUMBER 
+function onSuccess(result) {
+    console.log("Success:" + result);
+}
+
+function onError(result) {
+    console.log("Error:" + result);
+}
+
+function callNumber(number) {
+    console.log("Launching Calling Service for number " + number);
+    window.plugins.CallNumber.callNumber(onSuccess, onError, number, false);
+}
+function myStopFunction() {
+    clearInterval(myVar);
+}

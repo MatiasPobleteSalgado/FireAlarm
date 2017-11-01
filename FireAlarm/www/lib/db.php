@@ -8,7 +8,7 @@
 			} catch (Exception $e) {
 				$this -> conn = NULL;
 				echo json_encode("{error: 'DatabaseError'}");
-				header("../index.php");
+				header("../index.html");
 			}
 		}
 	}

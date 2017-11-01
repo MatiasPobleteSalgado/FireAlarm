@@ -5,5 +5,14 @@ function Notifications(controller) {
 	
 	this.controller.components["notifications"] = this.container;
 
+    document.addEventListener('deviceready', function () {
+        cordova.plugins.notification.local.schedule({
+            id: 1,
+            title: "Notification Test",
+            message: "Message Text",
+        });
+    }, false);
+
+
 	return this;
 }

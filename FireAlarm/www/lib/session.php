@@ -3,7 +3,7 @@
 		public static function check(){
 			session_start();
 			if($SESSION["user"] == NULL){
-				header("ïndex.php");
+				header("ïndex.html");
 			}
 		}
 

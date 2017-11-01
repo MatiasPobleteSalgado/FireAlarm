@@ -24,10 +24,10 @@
 				echo $notifications;
 				break;
 			default:
-				header("index.php");
+				header("index.html");
 		}
 	}
 	else{
-		header("index.php");
+		header("index.html");
 	}
 ?>
