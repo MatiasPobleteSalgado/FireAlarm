@@ -14,15 +14,15 @@ local function get_networks(client)
             if list ~= nil then
                 print(httpHeader .. list)
                 client:send(httpHeader .. list)
-                client:close()
+                --client:close()
             else
                 client:send('{"ERROR":"NilReturn", "Message":"None is return"}')
-                client:close()
+                --client:close()
             end
         end)
     else
         client:send('{"ERROR":"NilReturn","Message":"WifiStationAP not established"}')
-        client:close()
+        --client:close()
     end
 end
 
@@ -30,30 +30,32 @@ local function set_credential(client,dict)
     file.remove("credential.json")
     if file.open("credential.json", "w+") then
         local str = '{"ssid":"'..dict.ssid..'"'
-        if dict.pwd ~= nil then
+        if dict.pwd ~= nil and dict.pwd ~= "" then
             str = str..',"pwd":"'..dict.pwd..'"'
         end
         str = str..'}'
         file.writeline(str)
         file.close()
+        --wifi.sta.disconnect()
+        wifi.sta.config(cjson.decode(str))
+        --wifi.sta.connect()
         client:send(httpHeader .. '{"Message":"success"}')
-        client:close()
+        --client:close()
 
         local mytimer = tmr.create()
 
         -- oo calling
-        mytimer:register(5000, tmr.ALARM_SINGLE, function (t)
+        mytimer:register(20000, tmr.ALARM_SINGLE, function (t)
             print("changing mode")
             wifi.sta.disconnect()
             wifi.setmode(wifi.STATION)
-            wifi.sta.config(cjson.decode(str))
             wifi.sta.connect()
         end)
         mytimer:start()
         mytimer = nil
     else
         client:send(httpHeader .. '{"ERROR":"nilFile","Message":"Error has occurred while trying to manipulate the file"}')
-        client:close()
+        --client:close()
     end
 end
 
@@ -65,10 +67,10 @@ end
 local function get_ip(client)
     if wifi.sta.getip() ~= nil then
         client:send(httpHeader .. '{"Value":"'..wifi.sta.getip()..'","Message":"Success"}')
-        client:close()
+        --client:close()
     else
         client:send(httpHeader .. '{"ERROR":"NilReturn","Message":"NodeMCU is not Connected"}')
-        client:close()
+        --client:close()
     end
 end
 

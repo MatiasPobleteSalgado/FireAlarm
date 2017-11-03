@@ -64,14 +64,14 @@ srv:listen(80,function(conn)
             elseif args.type == "set_user" then
                 if wifi.sta.getip() ~= nil then
                     client:send(srv_action.set_user(args))
-                    client:close()
+                    --client:close()
                 else
                     client:send('{"type":"Error","Message":"NodeMCU is not Connected"}')
-                    client:close()
+                    --client:close()
                 end
             else
                 client:send('{"type":"Error","Message":"The action is not recognized"}')
-                client:close()
+                --client:close()
             end
         --------------------------------------
 
@@ -81,6 +81,10 @@ srv:listen(80,function(conn)
         --    client:close()
         end
         -------------------------------------
+    end)
+    conn:on("sent",function(client)
+        print("Closing")
+        client:close() 
     end)
 end)
 -------------------------------------
