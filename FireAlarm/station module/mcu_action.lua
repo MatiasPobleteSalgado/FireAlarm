@@ -26,6 +26,13 @@ local function get_networks(client)
     end
 end
 
+local function finish_config()
+    print("changing mode")
+    wifi.sta.disconnect()
+    wifi.setmode(wifi.STATION)
+    wifi.sta.connect()
+end
+
 local function set_credential(client,dict)
     file.remove("credential.json")
     if file.open("credential.json", "w+") then
@@ -42,14 +49,11 @@ local function set_credential(client,dict)
         client:send(httpHeader .. '{"Message":"success"}')
         --client:close()
 
+        -- cuando se agrege a la app que cuando se establesca la conexion envie un post con "Finish config"
+        -- se sacan las siguientes 6 lineas
         local mytimer = tmr.create()
-
-        -- oo calling
         mytimer:register(20000, tmr.ALARM_SINGLE, function (t)
-            print("changing mode")
-            wifi.sta.disconnect()
-            wifi.setmode(wifi.STATION)
-            wifi.sta.connect()
+            finish_config()
         end)
         mytimer:start()
         mytimer = nil
@@ -78,5 +82,6 @@ mcu_action.set_credential = set_credential
 mcu_action.get_adc = get_adc
 mcu_action.get_ip = get_ip
 mcu_action.get_networks = get_networks
+mcu_action.finish_config = finish_config
 
 return mcu_action

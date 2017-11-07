@@ -61,6 +61,8 @@ srv:listen(80,function(conn)
                 mcu_action.get_ip(client)
             elseif args.type == "get_networks" then
                 mcu_action.get_networks(client)
+            elseif args.type == "finish_config" then
+                mcu_action.finish_config()
             elseif args.type == "set_user" then
                 if wifi.sta.getip() ~= nil then
                     client:send(srv_action.set_user(args))
