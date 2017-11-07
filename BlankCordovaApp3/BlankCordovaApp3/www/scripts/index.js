@@ -250,17 +250,14 @@ navigator.notification.confirm(
     'Game Over',           // title
     ['Restart', 'Exit']     // buttonLabels
 );
-
 */
+///////////
 
-document.addEventListener("deviceready", onDeviceReady, false);
 
-// Cordova is ready
-//
+document.addEventListener("deviceready", onDeviceReady, false)
 function onDeviceReady() {
     // Empty
 }
-
 // process the confirmation dialog result
 function onConfirm(buttonIndex) {
     //console.log('se selecciono el boton ' + buttonIndex);
@@ -279,17 +276,17 @@ function onConfirm(buttonIndex) {
 //
 function showConfirm() {
     navigator.notification.confirm(
-        'Desea llamar a emergencias',  // message
+        'Decea llamar a emergencias',  // message
         onConfirm,              // callback to invoke with index of button pressed
         'CASA EN PELIGRO',            // title
         'EMERGENCIAS, NO'          // buttonLabels
     );
 }
-function myFunction() {
+function myFunction(){
     myVar = setInterval(showConfirm, 3000);
 }
 
-//CALNUMBER 
+//CALL NUMBER 
 function onSuccess(result) {
     console.log("Success:" + result);
 }
@@ -305,3 +302,21 @@ function callNumber(number) {
 function myStopFunction() {
     clearInterval(myVar);
 }
+
+//NOTIFICACION LOCAL
+document.addEventListener('deviceready', function () {
+    console.log(cordova.plugins.notification.local.launchDetails);
+    /*
+    cordova.plugins.notification.local.schedule({
+        title: 'Design team meeting',
+        trigger: { every: {minute: 1 , count:5 }},
+
+    });
+    */
+    cordova.plugins.notification.local.schedule({
+        title: 'My first notification',
+        text: 'Thats pretty easy...',
+        foreground: true
+});
+}, false);
+
