@@ -16,12 +16,12 @@ local function get_networks(client)
                 client:send(httpHeader .. list)
                 --client:close()
             else
-                client:send('{"ERROR":"NilReturn", "Message":"None is return"}')
+                client:send('{"type":"Error","value":"None is return"}')
                 --client:close()
             end
         end)
     else
-        client:send('{"ERROR":"NilReturn","Message":"WifiStationAP not established"}')
+        client:send('{"type":"Error","value":"WifiStationAP not established"}')
         --client:close()
     end
 end
@@ -46,7 +46,7 @@ local function set_credential(client,dict)
         --wifi.sta.disconnect()
         wifi.sta.config(cjson.decode(str))
         --wifi.sta.connect()
-        client:send(httpHeader .. '{"Message":"success"}')
+        client:send(httpHeader .. '{"type":"message","value":"success"}')
         --client:close()
 
         -- cuando se agrege a la app que cuando se establesca la conexion envie un post con "Finish config"
@@ -58,22 +58,22 @@ local function set_credential(client,dict)
         mytimer:start()
         mytimer = nil
     else
-        client:send(httpHeader .. '{"ERROR":"nilFile","Message":"Error has occurred while trying to manipulate the file"}')
+        client:send(httpHeader .. '{"type":"Error","value":"Error has occurred while trying to manipulate the file"}')
         --client:close()
     end
 end
 
 local function get_adc(client)
-    client:send(httpHeader .. '{"Value":'..adc.read(0)..',"Message":"Success"}')
+    client:send(httpHeader .. '{"type":"adc","value":'..adc.read(0)..'}')
     client:close()
 end
 
 local function get_ip(client)
     if wifi.sta.getip() ~= nil then
-        client:send(httpHeader .. '{"Value":"'..wifi.sta.getip()..'","Message":"Success"}')
+        client:send(httpHeader .. '{"type":"ip","value":"'..wifi.sta.getip()..'"}')
         --client:close()
     else
-        client:send(httpHeader .. '{"ERROR":"NilReturn","Message":"NodeMCU is not Connected"}')
+        client:send(httpHeader .. '{"type":"Error","value":"NodeMCU is not Connected"}')
         --client:close()
     end
 end

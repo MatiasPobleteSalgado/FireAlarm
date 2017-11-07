@@ -6,7 +6,7 @@ local function httpPost(url, dict, callback)
         cjson.encode(dict),
         function (code,data)
             if (code < 0) then
-                print('{"ERROR":"PostError","Message":"No se pudo realizar el post"}')
+                callback('{"type":"Error","value":"No se pudo realizar el post"}')
             else
                 callback(data)
             end

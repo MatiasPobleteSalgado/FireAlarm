@@ -3,19 +3,29 @@ local httpModule = require('httpModule')
 local srv_action = {}
 
 local function set_user(client,dict)
-    local request = httpModule.httpPost('http://pillan.inf.uct.cl/~aflores/test.php',dict)
-    if cjson.decode(request).ERROR == nil then
-        file.remove("user.json")
-        if file.open("user.json","w+") then
-            file.writeline(data)
-            file.close()
-            client:send('{"Message":"Success"}')
+    httpModule.httpPost('http://pillan.inf.uct.cl/~aflores/test.php',
+    dict,
+    function (data)
+        if cjson.decode(data).type == "Error" then
+            file.remove("user.json")
+            if file.open("user.json","w+") then
+                data = cjson.decode(data)
+                local cfg = {
+                    user = data.user,
+                    location = data.location,
+                    rut = data.rut
+                }
+                file.writeline(cfg)
+                cfg = nil
+                file.close()
+                client:send('{"type":"message","value":"success"}')
+            else
+                client:send('{"type":"Error","value":"Error has occurred while trying to manipulate the file"}')
+            end
         else
-            client:send('{"ERROR":"NilFile","Message":"Error has occurred while trying to manipulate the file"}')
+            client:send(data)
         end
-    else
-       client:send(request)
-    end
+    end)
 end
 
 local function send_alert(adc_value)
@@ -25,7 +35,7 @@ local function send_alert(adc_value)
         user = "aflores",
         value = adc_value
     },
-    function ()
+    function (data)
         print "nos quemaremos todos"
     end)
 end

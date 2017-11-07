@@ -73,29 +73,30 @@ srv:listen(80,function(conn)
                 mcu_action.get_networks(client)
             elseif args.type == "finish_config" then
                 mcu_action.finish_config()
+                client:send('{"type":"message","value":"success"}')
             elseif args.type == "start_timer" then
                 rt:start()
-                client:send('{"type":"message","Message":"success"}')
+                client:send('{"type":"message","value":"success"}')
             elseif args.type == "stop_timer" then
                 rt:stop()
-                client:send('{"type":"message","Message":"success"}')
+                client:send('{"type":"message","value":"success"}')
             elseif args.type == "set_user" then
                 if wifi.sta.getip() ~= nil then
                     client:send(srv_action.set_user(args))
                     --client:close()
                 else
-                    client:send('{"type":"Error","Message":"NodeMCU is not Connected"}')
+                    client:send('{"type":"Error","value":"NodeMCU is not Connected"}')
                     --client:close()
                 end
             else
-                client:send('{"type":"Error","Message":"The action is not recognized"}')
+                client:send('{"type":"Error","value":"The action is not recognized"}')
                 --client:close()
             end
         --------------------------------------
 
         ---------- on invalid post ----------
         --else
-        --    client:send('{"ERROR":"NilReturn","Message":"None is returned"}')
+        --    client:send('{"type":"Error","value":"None is returned"}')
         --    client:close()
         end
         -------------------------------------
