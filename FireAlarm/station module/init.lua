@@ -1,4 +1,4 @@
--- horas perdidas en este codigo: 3
+-- horas perdidas en este codigo: 4
 
 ---------- imports ----------
 local mcu_action = require('mcu_action')
@@ -9,6 +9,16 @@ local srv_action = require('srv_action')
 wifi.ap.dhcp.stop()
 collectgarbage()
 ---------------------------
+
+---------- Read Only Timer ----------
+rt = tmr.create()
+rt:register(5000,tmr.ALARM_AUTO, function () 
+    local value = adc.get(0)
+    if value > 512 then
+        srv_action.send_alert(value)
+    end
+end)
+-------------------------------------
 
 ---------- adc init config ----------
 if adc.force_init_mode(adc.INIT_ADC) then 
@@ -63,6 +73,12 @@ srv:listen(80,function(conn)
                 mcu_action.get_networks(client)
             elseif args.type == "finish_config" then
                 mcu_action.finish_config()
+            elseif args.type == "start_timer" then
+                rt:start()
+                client:send('{"type":"message","Message":"success"}')
+            elseif args.type == "stop_timer" then
+                rt:stop()
+                client:send('{"type":"message","Message":"success"}')
             elseif args.type == "set_user" then
                 if wifi.sta.getip() ~= nil then
                     client:send(srv_action.set_user(args))

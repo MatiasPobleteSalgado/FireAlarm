@@ -18,6 +18,19 @@ local function set_user(client,dict)
     end
 end
 
+local function send_alert(adc_value)
+    httpModule.httpPost('http://localhost:8080/test/test.php',
+    {
+        type = "send_alert",
+        user = "aflores",
+        value = adc_value
+    },
+    function ()
+        print "nos quemaremos todos"
+    end)
+end
+
 srv_action.set_user = set_user
+srv_action.send_alert = send_alert
 
 return srv_action
