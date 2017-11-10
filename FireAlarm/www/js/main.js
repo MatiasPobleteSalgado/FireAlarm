@@ -44,4 +44,3 @@ function DOMController(){
 }
 
 app = new DOMController();
-

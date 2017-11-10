@@ -10,8 +10,10 @@ function Account(controller) {
 
 	this.show = function(){
 		this.container.css("display", "block");
+		this.userName.empty();
 		this.userName.append(this.controller.login.user.name);
 		//this.userAddress.append(this.controller.login.user[address]);
+		this.userEmail.empty();
 		this.userEmail.append(this.controller.login.user.eMail);
 	}
 

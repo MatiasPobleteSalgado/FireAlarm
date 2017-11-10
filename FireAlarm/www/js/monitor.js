@@ -24,17 +24,17 @@ function Monitor(controller) {
 	}
 
 	this.getSensorData = function(){
-		console.log("Getting data");
 		$.post(
-			"http://localhost/FireAlarm/nodeSim.php",
-			{"mcu_action": "get_adc"},
-			_this.sensorCallback
+			"http://" + _this.controller.wifiSelector.nodeIP,
+			'{"type": "get_adc"}',
+			_this.sensorCallback,
+			"text"
 		);
 	}
 
 	this._start = function(){
 		console.log("Monitor started");
-		this.intervalID = setInterval(this.getSensorData, 500);
+		this.intervalID = setInterval(this.getSensorData, 1000);
 		this.started = true
 	}
 
