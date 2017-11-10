@@ -23,7 +23,8 @@ function DOMController(){
 		this.components[comp].show();
 	}
 
-	this.wifiReady = function(){
+	this.wifiReady = function(data, status){
+		console.log(data);
 		_this.show("account");
 	}
 

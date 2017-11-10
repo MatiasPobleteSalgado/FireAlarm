@@ -56,9 +56,7 @@ srv:listen(80,function(conn)
         print(request)
         local args = string.match(request,"{.-$")
         if args == "" or args == nil then args="{}" end
-        print("<"..args..">")
         args = cjson.decode(args)
-        --print(args.type)
         -----------------------------------
 
         ---------- action receive ----------
@@ -72,7 +70,7 @@ srv:listen(80,function(conn)
             elseif args.type == "get_networks" then
                 mcu_action.get_networks(client)
             elseif args.type == "finish_config" then
-                mcu_action.finish_config()
+                mcu_action.finish_config(client)
                 client:send('{"type":"message","value":"success"}')
             elseif args.type == "start_timer" then
                 rt:start()

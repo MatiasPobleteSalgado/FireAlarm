@@ -2,7 +2,7 @@
 	class Session{
 		public static function check(){
 			session_start();
-			if($SESSION["user"] == NULL){
+			if($_SESSION["user"] == NULL){
 				header("ïndex.php");
 			}
 		}

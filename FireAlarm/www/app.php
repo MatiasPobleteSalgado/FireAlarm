@@ -20,7 +20,7 @@
 				break;
 			case 'getNotifications':
 				Session::check();
-				$notifications = Notification::getNotifications($db, $_POST["last"]);
+				$notifications = NotificationService::getNotifications($db, $_POST["last"]);
 				echo $notifications;
 				break;
 			default:

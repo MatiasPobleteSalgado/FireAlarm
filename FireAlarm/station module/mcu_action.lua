@@ -16,21 +16,28 @@ local function get_networks(client)
                 client:send(httpHeader .. list)
                 --client:close()
             else
-                client:send('{"type":"Error","value":"None is return"}')
+                client:send(httpHeader .. '{"type":"Error","value":"None is return"}')
                 --client:close()
             end
         end)
     else
-        client:send('{"type":"Error","value":"WifiStationAP not established"}')
+        client:send(httpHeader .. '{"type":"Error","value":"WifiStationAP not established"}')
         --client:close()
     end
 end
 
-local function finish_config()
+local function finish_config(client)
     print("changing mode")
-    wifi.sta.disconnect()
-    wifi.setmode(wifi.STATION)
-    wifi.sta.connect()
+    client:send(httpHeader .. '{"type":"message","value":"success"}')
+    client:close()
+    local mytimer = tmr.create()
+        mytimer:register(3000, tmr.ALARM_SINGLE, function (t)
+        wifi.sta.disconnect()
+        wifi.setmode(wifi.STATION)
+        wifi.sta.connect()
+    end)
+    mytimer:start()
+    mytimer = nil
 end
 
 local function set_credential(client,dict)
@@ -43,20 +50,20 @@ local function set_credential(client,dict)
         str = str..'}'
         file.writeline(str)
         file.close()
-        --wifi.sta.disconnect()
         wifi.sta.config(cjson.decode(str))
+        --wifi.sta.disconnect()
         --wifi.sta.connect()
         client:send(httpHeader .. '{"type":"message","value":"success"}')
         --client:close()
 
         -- cuando se agrege a la app que cuando se establesca la conexion envie un post con "Finish config"
         -- se sacan las siguientes 6 lineas
-        local mytimer = tmr.create()
-        mytimer:register(20000, tmr.ALARM_SINGLE, function (t)
-            finish_config()
-        end)
-        mytimer:start()
-        mytimer = nil
+        -- local mytimer = tmr.create()
+        -- mytimer:register(20000, tmr.ALARM_SINGLE, function (t)
+           -- finish_config()
+        -- end)
+        -- mytimer:start()
+        -- mytimer = nil
     else
         client:send(httpHeader .. '{"type":"Error","value":"Error has occurred while trying to manipulate the file"}')
         --client:close()

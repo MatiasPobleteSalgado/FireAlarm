@@ -48,21 +48,38 @@ function WifiSelector(controller) {
 		$.post(
 			"http://192.168.1.1",
 			JSON.stringify(postData),
-			_this.nodeResponse,
+			_this.nodeCredResponse,
 			"text"
 		);
 	}
 
-	this.nodeResponse = function(data, status){
-		console.log(data);
-		setTimeout(_this.getIP, 3000);
+	this.finishConfig = function(){
+		console.log("Finishing");
+		$.post(
+			"http://192.168.1.1",
+			'{"type": "finish_config"}',
+			_this.controller.wifiReady,
+			"text"
+		);
+	}
+
+	this.nodeCredResponse = function(data, status){
+		var response = JSON.parse(data);
+		if(response.type != "Error"){
+			_this.getIP();
+		}
 	}
 
 	this.nodeIPResponse = function(data, status){
 		console.log(data);
 		var ipData = JSON.parse(data);
-		_this.nodeIP = ipData.Value;
-		setTimeout(_this.controller.wifiReady, 18000);
+		if(ipData.type == "ip"){
+			_this.nodeIP = ipData.value;
+			_this.finishConfig();
+		}
+		else{
+			_this.getIP();
+		}
 	}
 
 	this.nodeWifiNetResponse = function(data, status){
