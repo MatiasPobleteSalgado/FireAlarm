@@ -6,14 +6,25 @@ function WifiSelector(controller) {
 	this.wifiForm   = $("#wifiForm");
 	this.selectedNet = $("#selectedNet");
 	this.selectedNetID = null;
+	this.nodeIP = null;
 
 	this.getNetworks = function(){
-		for(indx in post){
-			this.wifiList.append(
-				'<button type="button" class="list-group-item wifiNetBtn" id="net-' + indx +'">' + post[indx] + '</button>'
-			)
-		}
-		$(".wifiNetBtn").click(this.selectNetwork);
+		$.post(
+			"http://192.168.1.1",
+			'{"type": "get_networks"}',
+			this.nodeWifiNetResponse,
+			"text"
+		);
+	}
+
+	this.getIP = function(){
+		console.log("Getting IP");
+		$.post(
+			"http://192.168.1.1",
+			'{"type": "get_ip"}',
+			_this.nodeIPResponse,
+			"text"
+		);
 	}
 
 	this.selectNetwork = function(evnt){
@@ -35,17 +46,46 @@ function WifiSelector(controller) {
 		postData["ssid"] = _this.selectedNetID;
 		console.log(postData);
 		$.post(
-			"http://localhost/fireAlarm/nodeSim.php",
-			postData,
-			_this.nodeResponse
+			"http://192.168.1.1",
+			JSON.stringify(postData),
+			_this.nodeResponse,
+			"text"
 		);
 	}
 
 	this.nodeResponse = function(data, status){
 		console.log(data);
+		setTimeout(_this.getIP, 3000);
+	}
+
+	this.nodeIPResponse = function(data, status){
+		console.log(data);
+		var ipData = JSON.parse(data);
+		_this.nodeIP = ipData.Value;
+		setTimeout(_this.controller.wifiReady, 18000);
+	}
+
+	this.nodeWifiNetResponse = function(data, status){
+		var nets = JSON.parse(data);
+		console.log(nets);
+		for(indx in nets){
+			_this.wifiList.append(
+				'<button type="button" class="list-group-item wifiNetBtn" id="net-' + indx +'">' + nets[indx] + '</button>'
+			)
+		}
+		$(".wifiNetBtn").click(_this.selectNetwork);
 	}
 
 	this.wifiForm.on("submit", this.sendNetworkData);
-	this.controller.components["wifiSelector"] = this.container;
+	this.controller.components["wifiSelector"] = this;
+
+	this.show = function(){
+		this.container.css("display", "block");
+	}
+
+	this.hide = function(){
+		this.container.css("display", "none");
+	}
+
 	return this;
 }

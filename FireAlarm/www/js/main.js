@@ -18,9 +18,13 @@ function DOMController(){
 
 	this.show = function(comp){
 		for(var c in this.components){
-			this.components[c].css("display", "none");
+			this.components[c].hide();
 		}
-		this.components[comp].css("display", "block");
+		this.components[comp].show();
+	}
+
+	this.wifiReady = function(){
+		_this.show("account");
 	}
 
 	this.onLogin = function(){

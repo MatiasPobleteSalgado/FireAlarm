@@ -3,7 +3,15 @@ function Notifications(controller) {
 	this.controller = controller;
 	this.container = $("#notificationCont");
 	
-	this.controller.components["notifications"] = this.container;
+	this.controller.components["notifications"] = this;
 
+	this.show = function(){
+		this.container.css("display", "block");
+	}
+
+	this.hide = function(){
+		this.container.css("display", "none");
+	}
+	
 	return this;
 }
