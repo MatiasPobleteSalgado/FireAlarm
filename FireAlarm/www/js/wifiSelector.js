@@ -9,22 +9,26 @@ function WifiSelector(controller) {
 	this.nodeIP = null;
 
 	this.getNetworks = function(){
+		console.log("Sending request");
+		/*
+		$.ajax({
+			url: "http://192.168.1.1",
+			data: {"type": "get_networks"},
+			type: 'POST',
+			crossDomain: true,
+			dataType: 'json',
+			success: this.nodeWifiNetResponse,
+			error: function() { alert('Failed!'); }
+		});
+		*/
+		
 		$.post(
-			"http://192.168.1.1",
-			'{"type": "get_networks"}',
-			this.nodeWifiNetResponse,
-			"text"
+			"http://localhost/nodeSim",
+			{"type": "get_networks"},
+			_this.nodeWifiNetResponse,
+			"json"
 		);
-	}
 
-	this.getIP = function(){
-		console.log("Getting IP");
-		$.post(
-			"http://192.168.1.1",
-			'{"type": "get_ip"}',
-			_this.nodeIPResponse,
-			"text"
-		);
 	}
 
 	this.selectNetwork = function(evnt){
@@ -46,34 +50,25 @@ function WifiSelector(controller) {
 		postData["ssid"] = _this.selectedNetID;
 		console.log(postData);
 		$.post(
-			"http://192.168.1.1",
-			JSON.stringify(postData),
-			_this.nodeResponse,
-			"text"
+			"http://localhost/fireAlarm/nodeSim.php",
+			postData,
+			_this.nodeResponse
 		);
 	}
 
-	this.nodeResponse = function(data, status){
-		console.log(data);
-		setTimeout(_this.getIP, 3000);
-	}
-
 	this.nodeIPResponse = function(data, status){
-		console.log(data);
 		var ipData = JSON.parse(data);
-		_this.nodeIP = ipData.Value;
-		setTimeout(_this.controller.wifiReady, 18000);
+		_this.nodeIP = ipData.ip;
 	}
 
 	this.nodeWifiNetResponse = function(data, status){
 		var nets = JSON.parse(data);
-		console.log(nets);
 		for(indx in nets){
-			_this.wifiList.append(
-				'<button type="button" class="list-group-item wifiNetBtn" id="net-' + indx +'">' + nets[indx] + '</button>'
+			this.wifiList.append(
+				'<button type="button" class="list-group-item wifiNetBtn" id="net-' + indx +'">' + post[indx] + '</button>'
 			)
 		}
-		$(".wifiNetBtn").click(_this.selectNetwork);
+		$(".wifiNetBtn").click(this.selectNetwork);
 	}
 
 	this.wifiForm.on("submit", this.sendNetworkData);

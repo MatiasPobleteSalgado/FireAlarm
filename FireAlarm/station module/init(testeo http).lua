@@ -13,7 +13,7 @@ if wifi.sta.getip() ~= nil then
     table.hola = "Perico"
     httpModule.httpPost('http://pillan.inf.uct.cl/~itopp/test.php', 
                         cjson.encode(table),
-                        function(code, data)
+                        function(data)
                             print(data)
                         end)
 else 
