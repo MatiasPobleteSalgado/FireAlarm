@@ -8,7 +8,7 @@ function Login(controller) {
 	this.send = function(evnt){
 		evnt.preventDefault();
 		$.post(
-			"app.php",
+			"http://192.168.1.101/FireAlarm/app.php",
 			_this.form.serialize(),
 			_this.response
 		);

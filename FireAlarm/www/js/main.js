@@ -16,11 +16,13 @@ function DOMController(){
 		_this.navWidgets.click(_this.navigate);
 	}
 
-	this.show = function(comp){
-		for(var c in this.components){
-			this.components[c].hide();
-		}
-		this.components[comp].show();
+    this.show = function (comp) {
+        for (var c in _this.components) {
+            console.log("asdads");
+			_this.components[c].hide();
+        }
+        console.log("Show " + comp);
+		_this.components[comp].show();
 	}
 
 	this.wifiReady = function(data, status){
@@ -28,10 +30,10 @@ function DOMController(){
 		_this.show("account");
 	}
 
-	this.onLogin = function(){
+    this.onLogin = function () {
+        console.log("Login finished");
 		this.show("wifiSelector");
 		this.logedOptions.css("display", "block");
-		this.wifiSelector.getNetworks();
 	}
 
 	this.navigate = function(evnt){

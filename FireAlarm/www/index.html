@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 	$access = "PUBLIC";
 ?>
 
@@ -72,7 +72,11 @@
 	</div>
 
 	<div class="container b-color-3 color-0 fillHeight" id="wifiCont" style="display: none;">
-		<div class="list-group" id="wifiList">
+        Conectar a red de dispositivo
+        <button type="button" id="nodeConnectedBtn">
+            Buscar redes
+        </button>
+		<div class="list-group" id="wifiList" style="display: none;">
 			<h1>Redes disponibles</h1>
 		</div>
 		<form class="form" id="wifiForm" style="display: none;">
@@ -132,6 +136,7 @@
 	<div class="copyright">
 		<p class="hCenter">&copy; 2017 Matias Poblete</p>
 	</div>
+    <script src="cordova.js"></script>
 	<!-- JQuery -->
 	<script src="js/jquery.js"></script>
 	<!-- Bootstrap JavaScript -->
