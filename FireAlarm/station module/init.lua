@@ -63,6 +63,8 @@ srv:listen(80,function(conn)
         if args.type ~= nil then
             if args.type == "set_credential" then
                 mcu_action.set_credential(client,args)
+            elseif args.type == "checkNet" then
+                mcu_action.checkMCUNet(client)
             elseif args.type == "get_adc" then
                 mcu_action.get_adc(client)
             elseif args.type == "get_ip" then

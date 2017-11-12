@@ -1,19 +1,15 @@
-﻿<?php
-	$access = "PUBLIC";
-?>
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
 	<title>FireAlarm</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
-	<link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/main.css">
 	<link rel="stylesheet" href="css/palette.css">
 </head>
-<body class="">
+<body onload="onLoad()">
 	<div role="navigation" class="navbar navbar-default navbar-static-top b-color-0 color-3 no-border">
 		<div class="container no-border">
 			<div class="navbar-header no-border">
@@ -72,13 +68,32 @@
 	</div>
 
 	<div class="container b-color-3 color-0 fillHeight" id="wifiCont" style="display: none;">
-        Conectar a red de dispositivo
-        <button type="button" id="nodeConnectedBtn">
-            Buscar redes
-        </button>
-		<div class="list-group" id="wifiList" style="display: none;">
-			<h1>Redes disponibles</h1>
-		</div>
+        <div id="connectScreen">
+            <div class="row">
+                <h2 class="hCenter">
+                    Conectar a red de dispositivo
+                </h2>
+                <div class="separator"></div>
+                <img src="image/wifi.png" style="width: 50%; height: auto" class="hCenter"/>
+            </div>
+            <div class="separator"></div>
+            <div class="row">
+                <button type="button" id="nodeConnectedBtn" class="btn hCenter">
+                    Buscar redes
+                </button>
+            </div>
+        </div>
+        <div class="row" id="netSelectorScreen" style="display: none;">
+            <h1>Redes disponibles</h1>
+            <div class="separator"></div>
+            <button type="button" id="retryScanBtn" class="btn hCenter">
+                Buscar denuevo
+            </button>
+            <div class="separator"></div>
+            <div class="list-group" id="wifiList">
+                
+            </div>
+        </div>
 		<form class="form" id="wifiForm" style="display: none;">
 			<h3 id="selectedNet"></h3>
 			<input type="hidden" name="type" value="set_credential">
@@ -136,18 +151,33 @@
 	<div class="copyright">
 		<p class="hCenter">&copy; 2017 Matias Poblete</p>
 	</div>
-    <script src="cordova.js"></script>
-	<!-- JQuery -->
-	<script src="js/jquery.js"></script>
-	<!-- Bootstrap JavaScript -->
-	<script src="js/bootstrap.min.js"></script>
-	<!-- Custom scripts-->
-	<script src="js/login.js"></script>
-	<script src="js/account.js"></script>
-	<script src="js/settings.js"></script>
-	<script src="js/notifications.js"></script>
-	<script src="js/monitor.js"></script>
-	<script src="js/wifiSelector.js"></script>
-	<script src="js/main.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/platformOverrides.js"></script>
+    <!-- JQuery -->
+    <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script type="text/javascript" charset="utf-8" src="js/bootstrap.min.js"></script>
+    <!-- Custom scripts    -->
+    <script type="text/javascript" charset="utf-8" src="js/fileHandler.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/login.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/account.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/settings.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/notifications.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/monitor.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/wifiSelector.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/main.js"></script>
+    <script type="text/javascript">
+        console.log("asd");
+        function onLoad() {
+            document.addEventListener(
+                "deviceready",
+                function () {
+                    console.log("creating app");
+                    app = new DOMController();
+                },
+                true
+            );
+        }
+    </script>
 </body>
 </html>

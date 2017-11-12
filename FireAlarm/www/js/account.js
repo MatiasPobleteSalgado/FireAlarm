@@ -23,3 +23,5 @@ function Account(controller) {
 
 	return this;
 }
+
+console.log("Account loaded");

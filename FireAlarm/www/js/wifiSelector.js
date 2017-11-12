@@ -2,18 +2,43 @@ function WifiSelector(controller) {
     var _this = this;
     this.controller = controller;
     this.container = $("#wifiCont");
+    this.connectScreen = $("#connectScreen");
+    this.netSelectorScreen = $("#netSelectorScreen");
     this.wifiList = $("#wifiList");
     this.wifiForm = $("#wifiForm");
     this.selectedNet = $("#selectedNet");
     this.nodeConnectedBtn = $("#nodeConnectedBtn");
+    this.retryScanBtn = $("#retryScanBtn");
     this.selectedNetID = null;
     this.nodeIP = null;
-    this.ipThread = null
+
+    this.checkMCUNet = function () {
+        $.post(
+            _this.controller.nodeMCUAPAddress,
+            '{"type": "checkNet"}',
+            _this.nodeCkeck,
+            "text"
+        );
+    }
+
+    this.nodeCkeck = function (data, status) {
+        if (status == "success") {
+            var msg = JSON.parse(data);
+            if (msg.type == "message") {
+                if (msg.value == "MCU Device") {
+                    _this.getNetworks();
+                }
+                return false;
+            }
+            return false;
+        }
+        return false;
+    }
 
     this.getNetworks = function () {
-        _this.nodeConnectedBtn.css("display", "none");
+        _this.connectScreen.css("display", "none");
         $.post(
-            "http://192.168.1.1",
+            _this.controller.nodeMCUAPAddress,
             '{"type": "get_networks"}',
             _this.nodeWifiNetResponse,
             "text"
@@ -23,7 +48,7 @@ function WifiSelector(controller) {
     this.getIP = function () {
         console.log("Getting IP");
         $.post(
-            "http://192.168.1.1",
+            _this.controller.nodeMCUAPAddress,
             '{"type": "get_ip"}',
             _this.nodeIPResponse,
             "text"
@@ -31,7 +56,7 @@ function WifiSelector(controller) {
     }
 
     this.selectNetwork = function (evnt) {
-        _this.wifiList.css("display", "none");
+        _this.netSelectorScreen.css("display", "none");
         _this.wifiForm.css("display", "block");
         _this.selectedNet.append("Conectarse a " + this.innerHTML);
         _this.selectedNetID = this.innerHTML;
@@ -47,9 +72,8 @@ function WifiSelector(controller) {
         }
 
         postData["ssid"] = _this.selectedNetID;
-        console.log(postData);
         $.post(
-            "http://192.168.1.1",
+            _this.controller.nodeMCUAPAddress,
             JSON.stringify(postData),
             _this.nodeCredResponse,
             "text"
@@ -59,7 +83,7 @@ function WifiSelector(controller) {
     this.finishConfig = function () {
         console.log("Finishing");
         $.post(
-            "http://192.168.1.1",
+            _this.controller.nodeMCUAPAddress,
             '{"type": "finish_config"}',
             _this.controller.wifiReady,
             "text"
@@ -67,31 +91,34 @@ function WifiSelector(controller) {
     }
 
     this.nodeCredResponse = function (data, status) {
-        var response = JSON.parse(data);
-        if (response.type !== "Error") {
-            _this.ipThread = setTimeout(_this.getIP, 1500);
-        }
-        else {
-            clearTimeout(_this.ipThread)
+        if (status == "success") {
+            var response = JSON.parse(data);
+            if (response.type != "Error") {
+                setTimeout(_this.getIP, 3000);
+            }
         }
     }
 
     this.nodeIPResponse = function (data, status) {
-        console.log(data);
-        var ipData = JSON.parse(data);
-        if (ipData.type === "ip") {
-            _this.nodeIP = ipData.value;
-            _this.finishConfig();
+        if (status == "success") {
+            var ipData = JSON.parse(data);
+            if (ipData.type === "ip") {
+                _this.nodeIP = ipData.value;
+                _this.finishConfig();
+            }
+            else {
+                setTimeout(_this.getIP, 1500);
+            }
         }
         else {
-            _this.getIP();
+            setTimeout(_this.getIP, 1500);
         }
     }
 
     this.nodeWifiNetResponse = function (data, status) {
-        _this.wifiList.css("display", "block");
+        _this.netSelectorScreen.css("display", "block");
         var nets = JSON.parse(data);
-        console.log(nets);
+        _this.wifiList.empty();      
         for (indx in nets) {
             _this.wifiList.append(
                 '<button type="button" class="list-group-item wifiNetBtn" id="net-' + indx + '">' + nets[indx] + '</button>'
@@ -101,7 +128,6 @@ function WifiSelector(controller) {
     }
 
     this.show = function () {
-        console.log("asd");
 		_this.container.css("display", "block");
 	}
 
@@ -110,8 +136,11 @@ function WifiSelector(controller) {
     }
 
     this.wifiForm.on("submit", this.sendNetworkData);
-    this.nodeConnectedBtn.click(this.getNetworks);
+    this.nodeConnectedBtn.click(this.checkMCUNet);
+    this.retryScanBtn.click(this.checkMCUNet);
     this.controller.components["wifiSelector"] = this;
-
+   
     return this;
 }
+
+console.log("WifiSelector loaded");

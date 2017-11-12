@@ -1,12 +1,17 @@
-function DOMController(){
+function DOMController() {
 	var _this = this;
 	this.document = $(document);
 	this.logedOptions = $(".onceLoged");
 	this.navWidgets = $(".navigation");
 	this.navBar = $("#navBar");
-	this.components = {};
+    this.components = {};
+    this.cloudServiceAddress = "http://192.168.1.9/FireAlarm/app.php";
+    this.nodeMCUAPAddress = "http://192.168.1.1";
+    this.fileSys = new FileHandler();
 
-	this.init = function(){
+
+    this.init = function () {
+        console.log("asd");
 		_this.login         = new Login(_this);
 		_this.monitor       = new Monitor(_this);
 		_this.settings      = new Settings(_this);
@@ -18,32 +23,30 @@ function DOMController(){
 
     this.show = function (comp) {
         for (var c in _this.components) {
-            console.log("asdads");
 			_this.components[c].hide();
         }
-        console.log("Show " + comp);
 		_this.components[comp].show();
 	}
 
 	this.wifiReady = function(data, status){
-		console.log(data);
 		_this.show("account");
 	}
 
     this.onLogin = function () {
+        //this.fileSys.saveUserInfo(this.login.user);
         console.log("Login finished");
-		this.show("wifiSelector");
-		this.logedOptions.css("display", "block");
-	}
+		_this.show("wifiSelector");
+		_this.logedOptions.css("display", "block");
+    }
 
 	this.navigate = function(evnt){
 		_this.navBar.collapse("toggle");
 		_this.show(this.name);
-		console.log(this.name);
 	}
 
+    //this.init();
 	this.document.ready(this.init);
 	return this;
 }
 
-app = new DOMController();
+console.log("Entering closing");
