@@ -5,6 +5,8 @@
 	require_once("lib/notificationService.php");
 	require_once("lib/session.php");
 
+	header('Access-Control-Allow-Origin: *');
+
 	if(isset($_POST["type"])){
 		switch ($_POST["type"]) {
 			case 'login':
