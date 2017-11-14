@@ -25,11 +25,19 @@
 				$notifications = NotificationService::getNotifications($db, $_POST["last"]);
 				echo $notifications;
 				break;
+			case 'session':
+				if (isset($_SESSION['user'])) {
+		            echo '{"type":"session","value":1}';
+		        }
+		        else {
+		            echo '{"type":"session","value":0}';
+		        }
+				break;
 			default:
-				header("index.php");
+				header("index.php"); // esto prontamente nos traera problemas
 		}
 	}
 	else{
-		header("index.php");
+		header("index.php"); // aqui igual
 	}
 ?>

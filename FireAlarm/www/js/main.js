@@ -19,6 +19,7 @@ function DOMController() {
 		_this.wifiSelector  = new WifiSelector(_this);
 		_this.account       = new Account(_this);
 		_this.navWidgets.click(_this.navigate);
+		_this.session();
 	}
 
     this.show = function (comp) {
@@ -42,6 +43,42 @@ function DOMController() {
 	this.navigate = function(evnt){
 		_this.navBar.collapse("toggle");
 		_this.show(this.name);
+	}
+
+	this.session = function () {
+		$.post(
+            _this.cloudServiceAddress,
+            "type=session",
+            function (data, status) {
+                if(status == "success") {
+                    _this.onSession(JSON.parse(data));
+                }
+                else {
+                    console.log("error: " + data);
+                }
+            }
+        );
+	}
+
+	this.onSession = function (data) {
+		if (data.type != 'error') {
+			if (data.type == 'session') {
+	            if (data.value == 1) {
+	                _this.logedOptions.css("display", "block");
+	                _this.show("wifiSelector");
+	            }
+	            else {
+	                _this.logedOptions.css("display", "none");
+	                _this.show("loginCont");
+	            }
+	        }
+	        else {
+	        	console.log(data.type + ": " + data.value)
+	        }
+        }
+        else {
+            console.log("error: " + data.value);
+        }
 	}
 
     //this.init();
