@@ -7,8 +7,6 @@ function DOMController() {
     this.components = {};
     this.cloudServiceAddress = "http://192.168.1.9/FireAlarm/app.php";
     this.nodeMCUAPAddress = "http://192.168.1.1";
-    this.fileSys = new FileHandler();
-
 
     this.init = function () {
         console.log("asd");
@@ -18,8 +16,10 @@ function DOMController() {
 		_this.notifications = new Notifications(_this);
 		_this.wifiSelector  = new WifiSelector(_this);
 		_this.account       = new Account(_this);
-		_this.navWidgets.click(_this.navigate);
-		_this.session();
+        _this.fileSys       = new FileHandler(_this);
+        _this.navWidgets.click(_this.navigate);
+        _this.fileSys.checkUserExists();
+		//_this.session();
 	}
 
     this.show = function (comp) {
@@ -29,13 +29,15 @@ function DOMController() {
 		_this.components[comp].show();
 	}
 
-	this.wifiReady = function(data, status){
+    this.wifiReady = function (data, status) {
+        _this.login.user.nodeIP = _this.wifiSelector.nodeIP;
+        _this.logedOptions.css("display", "block");
+        _this.fileSys.saveUserInfo(_this.login.user);
 		_this.show("account");
 	}
 
     this.onLogin = function () {
-        //this.fileSys.saveUserInfo(this.login.user);
-        console.log("Login finished");
+        this.fileSys.saveUserInfo(this.login.user);
 		_this.show("wifiSelector");
 		_this.logedOptions.css("display", "block");
     }
@@ -81,6 +83,35 @@ function DOMController() {
         }
 	}
 
+    this.userExists = function (user) {
+        _this.login.user = user;
+        _this.wifiSelector.nodeIP = user.nodeIP;
+        if ("nodeIP" in user) {
+            _this.toast("User Registered and Node Syncronized");
+            _this.show("account");
+            _this.logedOptions.css("display", "block");
+        }
+        else {
+            _this.show("wifiSelector");
+        }
+        //_this.logedOptions.css("display", "block");
+    }
+
+    this.noUser = function () {
+        this.navigate("login");
+    }
+
+    this.toast = function (msg) {
+        window.plugins.toast.showWithOptions(
+            {
+                message: msg,
+                duration: "short", // which is 2000 ms. "long" is 4000. Or specify the nr of ms yourself.
+                position: "bottom",
+                addPixelsY: -40  // added a negative value to move it up a bit (default 0)
+            }
+        );
+        console.log(msg);
+    }
     //this.init();
 	this.document.ready(this.init);
 	return this;

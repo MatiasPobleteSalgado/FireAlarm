@@ -1,20 +1,21 @@
-﻿function FileHandler() {
+﻿function FileHandler(cont) {
     var _this = this;
+    this.controller = cont;
     this.userFileName = "user.json";
 
     this.saveUserInfo = function (user) {
-        console.log("Here");
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
-            console.log('file system open: ' + fs.name);
-            fs.root.getFile(_this.userFileName, { create: true }, function (file) {
-                file.createWriter(
-                    function (fileWriter) {
-                        fileWriter.write(JSON.stringify(user));
-                    }
-                );
-            }, _this.onErrorCreateFile);
+        console.log(user);
 
-        }, _this.onErrorLoadFs);
+        window.resolveLocalFileSystemURL(cordova.file.applicationStorageDirectory, function (dir) {
+            dir.getFile(_this.userFileName, { create: true }, function (file) {
+                var logOb = file;
+                logOb.createWriter(function (fileWriter) {
+                    //fileWriter.seek(fileWriter.length);
+                    var blob = new Blob([JSON.stringify(user)], { type: 'text/plain' });
+                    fileWriter.write(blob);
+                }, function (e) { console.error(e); });
+            });
+        });
     }
 
     this.onErrorCreateFile = function () {
@@ -26,8 +27,20 @@
 
     }
 
-    this.checkUserExist = function () {
-        return false;
+    this.checkUserExists = function () {
+        $.get(cordova.file.applicationStorageDirectory + _this.userFileName, {}, _this.userExists);
+    }
+
+    this.userExists = function (data, status) {
+        if (status == "success") {
+            var user = JSON.parse(data);
+            _this.controller.userExists(user);
+        }
+        else {
+            _this.controller.noUser();
+            _this.controller.toast("No user Registered, login");
+
+        }
     }
 
     return this;

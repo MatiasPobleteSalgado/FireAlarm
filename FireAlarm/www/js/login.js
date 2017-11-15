@@ -31,8 +31,8 @@ function Login(controller) {
         }
 	}
 
-	this.error = function(error){
-		console.log("Error: " + error);
+    this.error = function (error) {
+        this.controller.toast("Error: " + error);
 	}
 
 	this.form.on("submit", this.send);

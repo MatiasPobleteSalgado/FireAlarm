@@ -110,9 +110,10 @@
   <plugin name="cordova-plugin-file" spec="~4.3.3" />
   <preference name="Orientation" value="portrait" />
   <plugin name="cordova-plugin-x-toast" spec="~2.6.0" src="https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin" />
-  <preference name="AndroidLaunchMode" value="singleTop" />
+  <preference name="AndroidLaunchMode" value="singleInstance" />
   <preference name="InAppBrowserStorageEnabled" value="True" />
-  <preference name="KeepRunning" value="False" />
+  <preference name="KeepRunning" value="True" />
   <plugin name="cordova-plugin-device" spec="~1.1.7" />
   <plugin name="de.appplant.cordova.plugin.local-notification" spec="~0.8.4" src="C:\Users\Matias\source\repos\backgroundtest\backgroundtest\plugins\de.appplant.cordova.plugin.local-notification" />
+  <plugin name="cordova-plugin-app-event" spec="~1.2.1" />
 </widget>
