@@ -1,6 +1,11 @@
 local mcu_action = {}
 httpHeader = 'HTTP/1.1 200 OK\r\nAccess-Control-Allow-Origin:*\r\nAccess-Control-Allow-Headers *AUTHORISED*\r\nContent-Type: application/json\r\n\r\n\r\n'
 
+local function checkMCUNet(client)
+    client:send(httpHeader .. '{"type":"message","value":"MCU Device"}')
+    client:close()
+end
+
 local function get_networks(client)
     if wifi.getmode() == wifi.STATIONAP then
         wifi.sta.getap(function(T)
@@ -90,5 +95,6 @@ mcu_action.get_adc = get_adc
 mcu_action.get_ip = get_ip
 mcu_action.get_networks = get_networks
 mcu_action.finish_config = finish_config
+mcu_action.checkMCUNet = checkMCUNet
 
 return mcu_action

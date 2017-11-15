@@ -60,3 +60,5 @@ function Monitor(controller) {
 
 	return this;
 }
+
+console.log("Monitor loaded");

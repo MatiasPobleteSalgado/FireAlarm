@@ -1,3 +1,4 @@
+console.log("entering");
 function Login(controller) {
 	var _this = this;
 	this.controller = controller;
@@ -6,31 +7,32 @@ function Login(controller) {
 	this.user = null;
 
 	this.send = function(evnt){
-		evnt.preventDefault();
+        evnt.preventDefault();
 		$.post(
-			"http://192.168.1.101/FireAlarm/app.php",
+			_this.controller.cloudServiceAddress,
 			_this.form.serialize(),
 			_this.response
 		);
 	}
 
-	this.response = function(data, status){
-		if(status != "success"){
-			this.error(data);
-			return;
-		}
-		var data = JSON.parse(data);
-		if("error" in data){
-			console.log(data["error"]);
-			return;
-		}
-		_this.user = data;
-		console.log(data);
-		_this.controller.onLogin();
+    this.response = function (data, status) {
+        if (status != "success") {
+            _this.error(data);
+            return;
+        }
+        else {
+            var data = JSON.parse(data);
+            if ("error" in data) {
+                _this.error(data["error"]);
+                return;
+            }
+            _this.user = data;
+            _this.controller.onLogin();
+        }
 	}
 
-	this.error = function(error){
-		console.log("Error: " + error);
+    this.error = function (error) {
+        this.controller.toast("Error: " + error);
 	}
 
 	this.form.on("submit", this.send);
@@ -42,7 +44,9 @@ function Login(controller) {
 
 	this.hide = function(){
 		this.container.css("display", "none");
-	}
+    }
 
 	return this;
 }
+
+console.log("Login loaded...");

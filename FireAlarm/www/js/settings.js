@@ -19,3 +19,5 @@ function Settings(controller) {
 
 	return this;
 }
+
+console.log("Settings loaded");
