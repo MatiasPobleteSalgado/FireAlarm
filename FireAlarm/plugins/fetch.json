@@ -15,15 +15,6 @@
         "is_top_level": true,
         "variables": {}
     },
-    "cordova-plugin-background-mode": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/katzer/cordova-plugin-background-mode",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "cordova-plugin-device": {
         "source": {
             "type": "registry",
@@ -88,6 +79,23 @@
             "id": "cordova-plugin-app-event"
         },
         "is_top_level": false,
+        "variables": {}
+    },
+    "cordova-plugin-background-mode": {
+        "source": {
+            "type": "local",
+            "path": "C:\\Users\\Matias\\source\\repos\\backgroundtest\\backgroundtest\\plugins\\cordova-plugin-background-mode"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "at.gofg.sportscomputer.powermanagement": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/boltex/cordova-plugin-powermanagement",
+            "subdir": "."
+        },
+        "is_top_level": true,
         "variables": {}
     }
 }

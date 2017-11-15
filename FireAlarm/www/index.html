@@ -44,14 +44,15 @@
 				-->
 				<li><a class="navigation onceLoged" href="#" style="display: none;" name="account">Cuenta</a></li>
 				<li><a class="navigation onceLoged" href="#" style="display: none;" name="monitor">Monitoreo</a></li>
-				<li><a class="navigation onceLoged" href="#" style="display: none;" name="notifications">Notificaciones</a></li>
+                <li><a class="navigation onceLoged" href="#" style="display: none;" name="notifications">Notificaciones</a></li>
+				<li><a class="onceLoged"            href="#" style="display: none;" id="quitBtn">Cerrar sesion</a></li>
 				<li><a class="navigation"           href="#"                        name="settings">Configuracion</a></li>
 
 			</ul>
 		</div>
 	</div>
 
-	<div class="container b-color-3 color-0 fillHeight" id="loginCont"><!-- style="display: none;">-->
+	<div class="container b-color-3 color-0 fillHeight" id="loginCont" style="display: none;">
 		<h2>Ingreso</h2>
 		<form class="form" id="loginForm">
 			<input type="hidden" name="type" value="login">
@@ -166,18 +167,5 @@
     <script type="text/javascript" charset="utf-8" src="js/monitor.js"></script>
     <script type="text/javascript" charset="utf-8" src="js/wifiSelector.js"></script>
     <script type="text/javascript" charset="utf-8" src="js/main.js"></script>
-    <script type="text/javascript">
-        console.log("asd");
-        function onLoad() {
-            document.addEventListener(
-                "deviceready",
-                function () {
-                    console.log("creating app");
-                    app = new DOMController();
-                },
-                true
-            );
-        }
-    </script>
 </body>
 </html>

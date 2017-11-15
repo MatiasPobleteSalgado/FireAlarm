@@ -18,6 +18,21 @@
         });
     }
 
+    this.delete = function () {
+        window.resolveLocalFileSystemURL(cordova.file.applicationStorageDirectory, function (dir) {
+            dir.getFile(_this.userFileName, { create: true }, function (file) {
+                file.remove(function () {
+                    _this.controller.toast("Session cerrada correctamente");
+                }, function (error) {
+                    _this.controller.toast("Error cerrando sesion: " + error);
+                }, function () {
+                    _this.controller.toast("La sesion no existe WTF");
+                });
+            });
+        });
+    }
+
+
     this.onErrorCreateFile = function () {
         console.log("Error creating file");
     }
@@ -28,7 +43,14 @@
     }
 
     this.checkUserExists = function () {
-        $.get(cordova.file.applicationStorageDirectory + _this.userFileName, {}, _this.userExists);
+        $.get(
+            cordova.file.applicationStorageDirectory + _this.userFileName,
+            {},
+            _this.userExists
+        ).fail(function () {
+            _this.controller.toast("No user Registered, login");
+            _this.controller.noUser();
+        });
     }
 
     this.userExists = function (data, status) {
@@ -37,9 +59,8 @@
             _this.controller.userExists(user);
         }
         else {
-            _this.controller.noUser();
             _this.controller.toast("No user Registered, login");
-
+            _this.controller.noUser();
         }
     }
 

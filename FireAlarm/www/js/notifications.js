@@ -2,23 +2,31 @@ function Notifications(controller) {
     var _this = this;
     this.controller = controller;
     this.container = $("#notificationCont");
+    this.lastNotification = 0;
+    this.threadID = null;
 
     this.controller.components["notifications"] = this;
 
     this.show = function () {
         this.container.css("display", "block");
-        this.get();
     }
 
     this.hide = function () {
         this.container.css("display", "none");
     }
 
+    this.start = function () {
+        cordova.plugins.backgroundMode.enable();
+        _this.threadID = setInterval(_this.get, 5000);
+    }
+
     this.get = function () {
+        console.log("Pidiendo");
+        console.log(_this.lastNotification);
         $.post(
-            this.controller.cloudServiceAddress,
-            { type: "getNotifications", last: -1 },
-            this.response
+            _this.controller.cloudServiceAddress,
+            { type: "getNotifications", last: _this.lastNotification},
+            _this.response
         );
     }
 
@@ -33,11 +41,12 @@ function Notifications(controller) {
 
             notif.push(newNot);
         }
-        console.log(JSON.stringify(notif));
-        cordova.plugins.notification.local.schedule(notif);
+        if (notif.length > 0) {
+            cordova.plugins.notification.local.schedule(notif);
+            console.log(parseInt(events[events.length - 1].code));
+            _this.lastNotification = parseInt(events[events.length - 1].code);
+        }
         this.notification();
-        console.log(notif);
-
     }
     // Aqui comienza la otra notificacion
 
@@ -73,5 +82,3 @@ function Notifications(controller) {
 
     return this;
 }
-
-console.log("Notifications loaded");
