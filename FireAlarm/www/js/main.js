@@ -17,6 +17,7 @@ function DOMController() {
 		_this.wifiSelector  = new WifiSelector(_this);
 		_this.account       = new Account(_this);
         _this.fileSys       = new FileHandler(_this);
+        _this.register      = new Register(_this)
         _this.navWidgets.click(_this.navigate);
         _this.quitBtn.click(_this.quit);
         _this.fileSys.checkUserExists();
