@@ -1,4 +1,4 @@
--- horas perdidas en este codigo: 4
+-- horas perdidas en este codigo: 9
 
 ---------- imports ----------
 local mcu_action = require('mcu_action')
@@ -12,10 +12,20 @@ collectgarbage()
 
 ---------- Read Only Timer ----------
 rt = tmr.create()
+counter = 0
+sended = false
 rt:register(5000,tmr.ALARM_AUTO, function () 
-    local value = adc.get(0)
-    if value > 512 then
+    local value = adc.read(0)
+    if value > 512 and sended == false then
         srv_action.send_alert(value)
+        sended = true
+    end
+    if sended == true then
+        counter = counter + 1
+        if counter > 60 then
+            counter = 0
+            sended = false
+        end
     end
 end)
 -------------------------------------

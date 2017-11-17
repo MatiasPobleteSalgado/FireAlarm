@@ -3,7 +3,7 @@ NodeMCU request:
 {"type":"get_networks"}
 {"type":"set_credential","ssid":SSID,"pwd"=PASSWORD}
 {"type":"get_ip"}
-{"type":"set_user","user":USER,"pwd":PASSWORD}
+{"type":"set_user","user":USER,"id":node.chipid()}
 {"type":"finish_config"}
 {"type":"get_adc"}
 {"type":"start_timer"}
@@ -20,3 +20,8 @@ NodeMCU response:
 {"type":"Error","value":"Error has occurred while trying to manipulate the file"}
 {"type":"Error","value":"NodeMCU is not Connected"}
 {"type":"message","value":"success"}
+
+NodeMCU post:
+
+{"type":"set_user","user":USER,"id":node.chipid()}
+{"type":"send_alert","id":node.chipid(),"status":"warning" or "danger","adc":ADC}

@@ -1,9 +1,10 @@
 local httpModule = require('httpModule')
+local config = require('config')
 
 local srv_action = {}
 
 local function set_user(client,dict)
-    httpModule.httpPost('http://pillan.inf.uct.cl/~aflores/test.php',
+    httpModule.httpPost(config.HOST(),
     dict,
     function (data)
         if cjson.decode(data).type == "Error" then
@@ -29,15 +30,16 @@ local function set_user(client,dict)
 end
 
 local function send_alert(adc_value)
-    httpModule.httpPost('http://localhost:8080/test/test.php',
-    {
-        type = "send_alert",
-        user = "aflores",
-        value = adc_value
-    },
-    function (data)
-        print "nos quemaremos todos"
-    end)
+    local alert = {}
+    alert.type = 'send_alert'
+    alert.id = node.chipid()
+    if adc_value > 768 then
+        alert.status = 'danger'
+    else
+        alert.status = 'warning'
+    end
+    alert.adc = adc_value
+    httpModule.httpPost(config.HOST(), alert, function(data) print(data) end)
 end
 
 srv_action.set_user = set_user
