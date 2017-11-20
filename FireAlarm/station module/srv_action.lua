@@ -11,10 +11,8 @@ local function send_alert(adc_value)
     alert.type = 'alert'
     alert.user = data.code
     alert.adc = adc_value
-    httpModule.httpPost(config.HOST(), alert, function(data) print(data) end)
+    httpModule.httpPost(config.HOST, alert, function(data) print(data) end)
 end
-
-srv_action.set_user = set_user
 srv_action.send_alert = send_alert
 
 return srv_action

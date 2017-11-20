@@ -14,15 +14,17 @@ collectgarbage()
 rt = tmr.create()
 counter = 0
 sended = false
-rt:register(5000,tmr.ALARM_AUTO, function () 
+rt:register(1000,tmr.ALARM_AUTO, function () 
     local value = adc.read(0)
-    if value > 512 and sended == false then
+    print(value)
+    if(value > 512) and (sended == false) then
+        print("Sending alert to server")
         srv_action.send_alert(value)
         sended = true
     end
     if sended == true then
         counter = counter + 1
-        if counter > 60 then
+        if counter > 10 then
             counter = 0
             sended = false
         end
@@ -84,20 +86,9 @@ srv:listen(80,function(conn)
             elseif args.type == "finish_config" then
                 mcu_action.finish_config(client)
                 client:send('{"type":"message","value":"success"}')
-            elseif args.type == "start_timer" then
                 rt:start()
-                client:send('{"type":"message","value":"success"}')
-            elseif args.type == "stop_timer" then
-                rt:stop()
-                client:send('{"type":"message","value":"success"}')
             elseif args.type == "set_user" then
-                if wifi.sta.getip() ~= nil then
-                    client:send(srv_action.set_user(args))
-                    --client:close()
-                else
-                    client:send('{"type":"error","value":"NodeMCU is not Connected"}')
-                    --client:close()
-                end
+                mcu_action.set_user(client,args)
             else
                 client:send('{"type":"error","value":"The action is not recognized"}')
                 --client:close()

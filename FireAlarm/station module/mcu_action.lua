@@ -108,6 +108,7 @@ local function set_user(client,data)
 end
 
 mcu_action.set_credential = set_credential
+mcu_action.set_user = set_user
 mcu_action.get_adc = get_adc
 mcu_action.get_ip = get_ip
 mcu_action.get_networks = get_networks
