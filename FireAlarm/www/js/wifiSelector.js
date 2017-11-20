@@ -91,9 +91,15 @@ function WifiSelector(controller) {
     }
 
     this.sendUserData = function () {
+        var data = {};
+        data["type"] = "set_user";
+        for (e in _this.controller.login.user) {
+            data[e] = _this.controller.login.user[e];
+        }
+
         $.post(
             _this.controller.nodeMCUAPAddress,
-            JSON.stringify(_this.controller.login.user),
+            JSON.stringify(data),
             _this.finishConfig,
             "text"
         );
