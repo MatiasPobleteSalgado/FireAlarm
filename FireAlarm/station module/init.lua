@@ -1,4 +1,4 @@
--- horas perdidas en este codigo: 9
+-- horas perdidas en este codigo: 10
 
 ---------- imports ----------
 local mcu_action = require('mcu_action')
@@ -95,11 +95,11 @@ srv:listen(80,function(conn)
                     client:send(srv_action.set_user(args))
                     --client:close()
                 else
-                    client:send('{"type":"Error","value":"NodeMCU is not Connected"}')
+                    client:send('{"type":"error","value":"NodeMCU is not Connected"}')
                     --client:close()
                 end
             else
-                client:send('{"type":"Error","value":"The action is not recognized"}')
+                client:send('{"type":"error","value":"The action is not recognized"}')
                 --client:close()
             end
         --------------------------------------
