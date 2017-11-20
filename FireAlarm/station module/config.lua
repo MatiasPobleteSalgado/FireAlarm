@@ -1,9 +1,5 @@
 local config = {}
 
-local function HOST()
-	return 'http://localhost:8080/test/test.php'
-end
-
-config.HOST = HOST
+config.HOST = "https://www.firealarm.cf/node.php"
 
 return config

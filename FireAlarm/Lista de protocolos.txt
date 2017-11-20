@@ -3,7 +3,7 @@ NodeMCU request:
 {"type":"get_networks"}
 {"type":"set_credential","ssid":SSID,"pwd"=PASSWORD}
 {"type":"get_ip"}
-{"type":"set_user","user":USER,"id":node.chipid()}
+{"type":"set_user","user":USER}
 {"type":"finish_config"}
 {"type":"get_adc"}
 {"type":"start_timer"}
@@ -14,14 +14,14 @@ NodeMCU response:
 {index:NETWORK}
 {"type":"ip","value":IP}
 {"type":"adc","value":ADC}
-{"type":"Error","value":"None is return"}
-{"type":"Error","value":"WifiStationAP not established"}
-{"type":"Error","value":"No se pudo realizar el post"}
-{"type":"Error","value":"Error has occurred while trying to manipulate the file"}
-{"type":"Error","value":"NodeMCU is not Connected"}
+{"type":"error","value":"None is return"}
+{"type":"error","value":"WifiStationAP not established"}
+{"type":"error","value":"No se pudo realizar el post"}
+{"type":"error","value":"Error has occurred while trying to manipulate the file"}
+{"type":"error","value":"NodeMCU is not Connected"}
 {"type":"message","value":"success"}
 
 NodeMCU post:
 
-{"type":"set_user","user":USER,"id":node.chipid()}
-{"type":"send_alert","id":node.chipid(),"status":"warning" or "danger","adc":ADC}
+{"type":"set_user","user":USER}
+{"type":"alert","id":node.chipid(),"status":"warning" or "danger","adc":ADC}

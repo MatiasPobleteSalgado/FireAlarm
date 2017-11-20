@@ -21,12 +21,12 @@ local function get_networks(client)
                 client:send(httpHeader .. list)
                 --client:close()
             else
-                client:send(httpHeader .. '{"type":"Error","value":"None is return"}')
+                client:send(httpHeader .. '{"type":"error","value":"None is return"}')
                 --client:close()
             end
         end)
     else
-        client:send(httpHeader .. '{"type":"Error","value":"WifiStationAP not established"}')
+        client:send(httpHeader .. '{"type":"error","value":"WifiStationAP not established"}')
         --client:close()
     end
 end
@@ -70,7 +70,7 @@ local function set_credential(client,dict)
         -- mytimer:start()
         -- mytimer = nil
     else
-        client:send(httpHeader .. '{"type":"Error","value":"Error has occurred while trying to manipulate the file"}')
+        client:send(httpHeader .. '{"type":"error","value":"Error has occurred while trying to manipulate the file"}')
         --client:close()
     end
 end
@@ -85,8 +85,25 @@ local function get_ip(client)
         client:send(httpHeader .. '{"type":"ip","value":"'..wifi.sta.getip()..'"}')
         --client:close()
     else
-        client:send(httpHeader .. '{"type":"Error","value":"NodeMCU is not Connected"}')
+        client:send(httpHeader .. '{"type":"error","value":"NodeMCU is not Connected"}')
         --client:close()
+    end
+end
+
+local function set_user(client,data)
+    file.remove("user.json")
+    if file.open("user.json","w+") then
+        local cfg = {
+            code = data.code,
+            name = data.name,
+            email = data.email
+        }
+        file.writeline(cjson.encode(cfg))
+        cfg = nil
+        file.close()
+        client:send('{"type":"message","value":"success"}')
+    else
+        client:send('{"type":"error","value":"Error has occurred while trying to manipulate the file"}')
     end
 end
 

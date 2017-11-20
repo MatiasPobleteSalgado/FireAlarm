@@ -6,11 +6,12 @@ local function httpPost(url, dict, callback)
         cjson.encode(dict),
         function (code,data)
             if (code < 0) then
-                print('{"ERROR":"PostError","Message":"No se pudo realizar el post"}')
+                callback('{"type":"error","value":"PostError"}')
             else
                 callback(data)
             end
-        end)
+        end
+    )
 end
 
 httpModule.httpPost = httpPost
