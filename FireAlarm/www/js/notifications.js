@@ -60,7 +60,7 @@ function Notifications(controller) {
     // Show a confirmation dialog
     this.notification = function (message) {
         navigator.notification.confirm(
-            message,                        // message
+            'Concentración de gas' + message,                        // message
             _this.onBtnConfirm,             // callback to invoke with index of button pressed
             'CASA EN PELIGRO',              // title
             'EMERGENCIAS, NO'               // buttonLabels
