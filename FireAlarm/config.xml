@@ -104,7 +104,6 @@
     <splash src="res/screens/windows/SplashScreenPhone.scale-240.png" width="1152" height="1920" />
   </platform>
   <plugin name="cordova-plugin-dialogs" spec="~1.3.3" />
-  <plugin name="call-number" spec="~0.0.2" src="https://github.com/Rohfosho/CordovaCallNumberPlugin" />
   <plugin name="cordova-plugin-badge" spec="~0.8.5" />
   <plugin name="cordova-plugin-file" spec="~4.3.3" />
   <preference name="Orientation" value="portrait" />
@@ -117,4 +116,5 @@
   <plugin name="cordova-plugin-app-event" spec="~1.2.1" />
   <plugin name="cordova-plugin-background-mode" spec="~0.7.2" src="C:\Users\Matias\source\repos\backgroundtest\backgroundtest\plugins\cordova-plugin-background-mode" />
   <plugin name="at.gofg.sportscomputer.powermanagement" spec="~1.1.0" src="https://github.com/boltex/cordova-plugin-powermanagement" />
+  <plugin name="call-number" spec="~0.0.2" src="https://github.com/Rohfosho/CordovaCallNumberPlugin" />
 </widget>

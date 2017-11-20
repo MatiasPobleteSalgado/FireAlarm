@@ -79,6 +79,7 @@ function Notifications(controller) {
     this.call = function (number) {
         console.log("Launching Calling Service for number " + number);
         window.plugins.CallNumber.callNumber(_this.onSuccess, _this.onError, number, false);
+        
     }
 
     return this;
