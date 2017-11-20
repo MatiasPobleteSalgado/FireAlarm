@@ -90,6 +90,15 @@ function WifiSelector(controller) {
         );
     }
 
+    this.sendUserData = function () {
+        $.post(
+            _this.controller.nodeMCUAPAddress,
+            JSON.stringify(_this.controller.login.user),
+            _this.finishConfig,
+            "text"
+        );
+    }
+
     this.nodeCredResponse = function (data, status) {
         if (status == "success") {
             var response = JSON.parse(data);
@@ -104,7 +113,7 @@ function WifiSelector(controller) {
             var ipData = JSON.parse(data);
             if (ipData.type === "ip") {
                 _this.nodeIP = ipData.value;
-                _this.finishConfig();
+                _this.sendUserData();
             }
             else {
                 setTimeout(_this.getIP, 1500);
