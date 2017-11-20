@@ -40,29 +40,30 @@ function Notifications(controller) {
             newNot.title = events[e].date;
 
             notif.push(newNot);
+            _this.notification(newNot.text);
         }
         if (notif.length > 0) {
             cordova.plugins.notification.local.schedule(notif);
             console.log(parseInt(events[events.length - 1].code));
             _this.lastNotification = parseInt(events[events.length - 1].code);
         }
-        this.notification();
+        
     }
     // Aqui comienza la otra notificacion
 
     this.onBtnConfirm = function (buttonIndex) {
         if (1 == buttonIndex) {
-            callNumber(103);                    //funcion que contiene el callNumber
+            _this.call(103);                    //funcion que contiene el callNumber
         }
     }
 
     // Show a confirmation dialog
-    this.notification = function () {
+    this.notification = function (message) {
         navigator.notification.confirm(
-            'Decea llamar a emergencias',  // message
-            this.onBtnConfirm,              // callback to invoke with index of button pressed
-            'CASA EN PELIGRO',            // title
-            'EMERGENCIAS, NO'          // buttonLabels
+            message,                        // message
+            _this.onBtnConfirm,             // callback to invoke with index of button pressed
+            'CASA EN PELIGRO',              // title
+            'EMERGENCIAS, NO'               // buttonLabels
         );
     }
 
@@ -77,7 +78,7 @@ function Notifications(controller) {
 
     this.call = function (number) {
         console.log("Launching Calling Service for number " + number);
-        window.plugins.CallNumber.callNumber(this.onSuccess, this.onError, number, false);
+        window.plugins.CallNumber.callNumber(_this.onSuccess, _this.onError, number, false);
     }
 
     return this;

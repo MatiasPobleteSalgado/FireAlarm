@@ -6,7 +6,7 @@ function DOMController() {
 	this.navBar = $("#navBar");
     this.quitBtn = $("#quitBtn");
     this.components = {};
-    this.cloudServiceAddress = "http://192.168.1.9/FireAlarm/app.php";
+    this.cloudServiceAddress = "https://www.firealarm.cf/app.php";
     this.nodeMCUAPAddress = "http://192.168.1.1";
 
     this.init = function () {
